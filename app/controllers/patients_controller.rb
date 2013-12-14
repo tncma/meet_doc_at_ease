@@ -2,8 +2,8 @@ class PatientsController < ApplicationController
   skip_before_filter :verify_authenticity_token
 
   def create
-    Patient.create(name: params[:name])
-    render text: "hello"
+    patient = Patient.create(name: params[:name])
+    redirect_to patients_path(patient)
   end
 
   def show
