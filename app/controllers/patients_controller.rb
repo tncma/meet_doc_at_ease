@@ -1,4 +1,6 @@
 class PatientsController < ApplicationController
+  require 'twilio-ruby'
+  include ActionView::Helpers::TextHelper
   skip_before_filter :verify_authenticity_token
 
   def create
@@ -12,11 +14,27 @@ class PatientsController < ApplicationController
     from = message_split[1]
     to = message_split[3]
     routes = RestClient.get("http://maps.googleapis.com/maps/api/directions/json?origin=Alwarpet&destination=Triplicane&sensor=false")
-    @route_instructions = JSON.parse(routes)["routes"].first["legs"].first["steps"].collect{ |r| r["html_instructions"]}.join(",")
+    @route_instructions = JSON.parse(routes)["routes"].first["legs"].first["steps"].collect{ |r| r["html_instructions"]}.join(" -> ")
+    intimate_control_room
   end
+
 
   private
   def permit_params
     params.permit!
+  end
+
+  def intimate_control_room
+    account_sid = 'ACdbf40a97127a8ad93496fdd02268b4eb'
+    auth_token = '9610a0197afad48fa385b2ed433a352c'
+
+    # set up a client to talk to the Twilio REST API
+    @client = Twilio::REST::Client.new account_sid, auth_token
+
+    @client.account.messages.create({
+      :from => '+19708185644',
+      :to => '+918754506975',
+      :body  => strip_tags(@route_instructions)
+    })
   end
 end

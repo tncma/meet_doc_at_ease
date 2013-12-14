@@ -5,6 +5,8 @@ gem 'rails', '4.0.0'
 gem 'pg'
 gem 'mysql2'
 gem 'rest-client'
+gem 'rest-client'
+gem 'twilio-ruby'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
 
