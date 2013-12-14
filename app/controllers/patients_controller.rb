@@ -7,9 +7,12 @@ class PatientsController < ApplicationController
   end
 
   def show
-    message = params["txtweb-message"] || "name noname"
-    name = message.split("name").last
-    Patient.create!(name: name)
+    message = params["txtweb-message"] || ""
+    message_split = message.split(" ")
+    from = message_split[1]
+    to = message_split[3]
+    routes = RestClient.get("http://maps.googleapis.com/maps/api/directions/json?origin=Alwarpet&destination=Triplicane&sensor=false")
+    @route_instructions = JSON.parse(routes)["routes"].first["legs"].first["steps"].collect{ |r| r["html_instructions"]}.join(",")
   end
 
   private
