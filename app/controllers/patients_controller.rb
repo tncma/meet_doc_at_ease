@@ -1,4 +1,4 @@
-class RegistrationsController < ApplicationController
+class PatientsController < ApplicationController
   def create
     Patient.create(name: params[:name])
     render text: "You are successfully registered."
