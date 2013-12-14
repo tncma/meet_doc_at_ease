@@ -14,6 +14,7 @@ class PatientsController < ApplicationController
     from = message_split[1]
     to = message_split[3]
     routes = RestClient.get("http://maps.googleapis.com/maps/api/directions/json?origin=Alwarpet&destination=Triplicane&sensor=false")
+    Route.create(directions: JSON.parse(routes)["routes"].first["legs"].first["steps"].collect{ |r| r["end_location"]})
     @route_instructions = JSON.parse(routes)["routes"].first["legs"].first["steps"].collect{ |r| r["html_instructions"]}.join(" -> ")
     intimate_control_room
   end
