@@ -7,8 +7,8 @@ class PatientsController < ApplicationController
   end
 
   def show
-    message = params["txtweb-message"]
-    name = message.split("name")
+    message = params["txtweb-message"] || "name noname"
+    name = message.split("name").last
     Patient.create!(name: name)
   end
 
