@@ -7,9 +7,9 @@ class PatientsController < ApplicationController
   end
 
   def show
-    p "#" * 100
-    p params
-    Patient.create!(name: params[:name])
+    message = params["txtweb-message"]
+    name = message.split("name")
+    Patient.create!(name: name)
   end
 
   private
