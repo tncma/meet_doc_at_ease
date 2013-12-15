@@ -1,4 +1,4 @@
-class PatientsController < ApplicationController
+class RegistrationsController < ApplicationController
   require 'twilio-ruby'
   include ActionView::Helpers::TextHelper
   skip_before_filter :verify_authenticity_token
