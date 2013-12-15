@@ -15,8 +15,8 @@ class RegistrationsController < ApplicationController
     to = message_split[3]
     routes = RestClient.get("http://maps.googleapis.com/maps/api/directions/json?origin=Alwarpet&destination=Triplicane&sensor=false")
     route = Route.create(directions: JSON.parse(routes)["routes"].first["legs"].first["steps"].collect{ |r| r["end_location"]})
-    @route_instructions = JSON.parse(routes)["routes"].first["legs"].first["steps"].collect{ |r| r["html_instructions"]}.join(" -> ")
-    intimate_control_room(route)
+    @route_instructions = "Please look into the map for tracking #{home_url(route.id)} #{strip_tags(@route_instructions)}. " + JSON.parse(routes)["routes"].first["legs"].first["steps"].collect{ |r| r["html_instructions"]}.join(" -> ")
+    # intimate_control_room
   end
 
 
@@ -25,7 +25,7 @@ class RegistrationsController < ApplicationController
     params.permit!
   end
 
-  def intimate_control_room(route)
+  def intimate_control_room
     account_sid = 'ACdbf40a97127a8ad93496fdd02268b4eb'
     auth_token = '9610a0197afad48fa385b2ed433a352c'
 
@@ -35,7 +35,7 @@ class RegistrationsController < ApplicationController
     @client.account.messages.create({
       :from => '+19708185644',
       :to => '+918754506975',
-      :body  => "Please look into the map for tracking #{home_path(route)}}. Please go in the route:  #{strip_tags(@route_instructions)}"
+      :body  => strip_tags(@route_instructions)
     })
   end
 end
